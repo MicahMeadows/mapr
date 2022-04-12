@@ -1,15 +1,14 @@
-import 'mapper_model.dart';
+import 'map_model.dart';
+import 'mapping_exception.dart';
 
-class Mapper {
-  static final Mapper _mapper = Mapper._();
+class Mapr {
+  static final Mapr _mapper = Mapr._();
 
-  static final Mapper mapr = Mapper();
-
-  factory Mapper() {
+  factory Mapr() {
     return _mapper;
   }
 
-  Mapper._();
+  Mapr._();
 
   List<MapModel> maps = [];
   void addMap<TSrc, TDst>(TDst Function(TSrc source) function) {
@@ -23,13 +22,16 @@ class Mapper {
       return element.sourceType == sourceType &&
           element.destinationType == TDst;
     }, orElse: () {
-      throw Exception('Mapping model for <$TSrc> to <$TDst> not found.');
+      // throw Exception('Mapping model for <$TSrc> to <$TDst> not found.');
+      throw MapModelNotFoundException(sourceType: TSrc, destinationType: TDst);
     });
 
     final mapModel = rawMapModel as MapModel<TSrc, TDst>;
-
-    final convertResult = mapModel.convert(sourceObject);
-
-    return convertResult;
+    try {
+      final convertResult = mapModel.convert(sourceObject);
+      return convertResult;
+    } catch (e) {
+      throw MappingFailureException(sourceType: TSrc, destinationType: TDst);
+    }
   }
 }
