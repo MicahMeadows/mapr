@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mapr/src/mapper.dart';
+import 'package:mapr/src/mapr.dart';
 import 'package:mapr/src/mapping_exception.dart';
 
 import 'test_model/person_models.dart';
@@ -8,8 +8,8 @@ void main() {
   group('Given I want to convert types', () {
     group('When I request the singleton instance.', () {
       test('Then I get the singleton.', () {
-        final instance = Mapper.I;
-        final instance2 = Mapper.I;
+        final instance = Mapr.I;
+        final instance2 = Mapr.I;
 
         final bothInstancesSameObject = instance == instance2;
 
@@ -18,9 +18,9 @@ void main() {
       test(
           'Then I can use previously registered mapping models when I get the service again',
           () {
-        final instance1 = Mapper.I;
+        final instance1 = Mapr.I;
         instance1.addMap<bool, int>((source) => 1);
-        final instance2 = Mapper.I;
+        final instance2 = Mapr.I;
         expect(
           () => instance2.addMap<bool, int>((source) => 1),
           throwsA(isA<MapAlreadyExistsException>()),
@@ -28,9 +28,9 @@ void main() {
       });
     });
     group('When I want to remove a map model', () {
-      late Mapper mapper;
+      late Mapr mapper;
       setUp(() {
-        mapper = Mapper();
+        mapper = Mapr();
         mapper.addMap<int, double>((source) => 22.2);
       });
       tearDown(() {
@@ -53,7 +53,7 @@ void main() {
     });
     group('When I want to add a map model', () {
       test('Then if the map model already exists an exception is thrown.', () {
-        final mapper = Mapper();
+        final mapper = Mapr();
 
         mapper.addMap<String, int>((source) => 123);
 
@@ -64,9 +64,9 @@ void main() {
       });
     });
     group('When I want to convert PersonDto and Person', () {
-      late Mapper mapper;
+      late Mapr mapper;
       setUp(() {
-        mapper = Mapper();
+        mapper = Mapr();
         mapper.addMap<DtoPerson, Person>((source) {
           final splitName = source.name.split(' ');
           final firstName = splitName[0];
@@ -146,9 +146,9 @@ void main() {
       });
     });
     group('When I want to convert a String int with int', () {
-      late Mapper mapper;
+      late Mapr mapper;
       setUp(() {
-        mapper = Mapper();
+        mapper = Mapr();
         mapper.addMap<String, int>((src) => int.parse(src));
         mapper.addMap<int, String>((src) => src.toString());
       });

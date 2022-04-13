@@ -2,10 +2,18 @@ import 'map_model.dart';
 import 'mapping_exception.dart';
 
 /// Object mapping service
-class Mapper {
-  static final Mapper _mapper = Mapper();
+///
+/// either create a mapper using Mapper() or get the singleton instance doing Mapper.I
+class Mapr {
+  static final Mapr _mapper = Mapr();
 
-  static Mapper get I {
+  /// Singleton instance of a Mapper
+  ///
+  /// Use this if you want to access a common mapper throughout your entire class without providing it otherwise
+  ///
+  /// If you are going to need to use for some reason different mapping logic with the same signatures.
+  /// Then prefer using multiple Mappers and not the singleton.
+  static Mapr get I {
     return _mapper;
   }
 

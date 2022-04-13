@@ -35,7 +35,7 @@ const person = Person(
 
 ### Setup maps
 ```dart
-Mapr().addMap<DtoPerson, Person>((source) {
+Mapr.I.addMap<DtoPerson, Person>((source) {
     final splitName = source.name.split(' ');
     final firstName = splitName[0];
     final lastName = splitName[1];
@@ -53,7 +53,7 @@ Mapr().addMap<DtoPerson, Person>((source) {
     );
 });
 
-Mapr().addMap<Person, DtoPerson>((source) {
+Mapr.I.addMap<Person, DtoPerson>((source) {
     final name = '${source.firstName} ${source.lastName}';
     return DtoPerson(
         name: name,
@@ -76,7 +76,7 @@ const dtoPerson = DtoPerson(
 );
 
 /// Map <DtoPerson> to <Person>
-Mapr().map<DtoPerson, Person>(dtoPerson);
+Mapr.I.map<DtoPerson, Person>(dtoPerson);
 
 /// This will create an object <Person> equal to
 const person = Person(
