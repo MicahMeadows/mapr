@@ -10,3 +10,7 @@
 
 * Add ability to create mappers without using the singleton
 * Add doc comments
+
+## 0.0.4
+
+* Remove flutter dependency
