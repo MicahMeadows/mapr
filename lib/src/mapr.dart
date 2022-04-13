@@ -1,39 +1,18 @@
-import 'map_model.dart';
-import 'mapping_exception.dart';
+import '../mapr.dart';
 
-/// Object mapping service
 class Mapr {
-  static final Mapr _mapper = Mapr._();
+  static final Mapr _mapr = Mapr._(Mapper());
 
   /// Get or register mapr service
   factory Mapr() {
+    return _mapr;
+  }
+
+  Mapper get I {
     return _mapper;
   }
 
-  Mapr._();
+  final Mapper _mapper;
 
-  final List<MapModel> _maps = [];
-  void addMap<TSrc, TDst>(TDst Function(TSrc source) function) {
-    _maps.add(MapModel<TSrc, TDst>(function));
-  }
-
-  TDst map<TSrc, TDst>(TSrc sourceObject) {
-    final rawMapModel = _maps.firstWhere((element) {
-      return element.sourceType == TSrc && element.destinationType == TDst;
-    }, orElse: () {
-      throw MapModelNotFoundException(sourceType: TSrc, destinationType: TDst);
-    });
-
-    final mapModel = rawMapModel as MapModel<TSrc, TDst>;
-    try {
-      final convertResult = mapModel.convert(sourceObject);
-      return convertResult;
-    } catch (e) {
-      throw FailedToMapException(
-        sourceType: TSrc,
-        destinationType: TDst,
-        message: e.toString(),
-      );
-    }
-  }
+  Mapr._(this._mapper);
 }
