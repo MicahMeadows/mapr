@@ -13,7 +13,7 @@ class MapException implements Exception {
 
 /// Mapping exception to throw when there is no map model registered to singleton
 class MapModelNotFoundException extends MapException {
-  MapModelNotFoundException({
+  const MapModelNotFoundException({
     required Type sourceType,
     required Type destinationType,
     String? message,
@@ -27,7 +27,7 @@ class MapModelNotFoundException extends MapException {
 
 /// Mapping exception to throw when an error occurs during mapping
 class FailedToMapException extends MapException {
-  FailedToMapException({
+  const FailedToMapException({
     required Type sourceType,
     required Type destinationType,
     String? message,
@@ -36,5 +36,19 @@ class FailedToMapException extends MapException {
           sourceType: sourceType,
           message:
               'Failed to map Type<$sourceType> to Type<$destinationType>: $message',
+        );
+}
+
+/// Mapping exception for when you attempt to add a map that already exists
+class MapAlreadyExistsException extends MapException {
+  MapAlreadyExistsException({
+    required Type sourceType,
+    required Type destinationType,
+    String? message,
+  }) : super(
+          sourceType: sourceType,
+          destinationType: destinationType,
+          message:
+              'A map already exists for mapping from Type<$sourceType> to Type<$destinationType>: $message',
         );
 }
