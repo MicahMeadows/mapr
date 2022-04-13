@@ -6,6 +6,27 @@ import 'test_model/person_models.dart';
 
 void main() {
   group('Given I want to convert types', () {
+    group('When I request the singleton instance.', () {
+      test('Then I get the singleton.', () {
+        final instance = Mapper.I;
+        final instance2 = Mapper.I;
+
+        final bothInstancesSameObject = instance == instance2;
+
+        expect(bothInstancesSameObject, true);
+      });
+      test(
+          'Then I can use previously registered mapping models when I get the service again',
+          () {
+        final instance1 = Mapper.I;
+        instance1.addMap<bool, int>((source) => 1);
+        final instance2 = Mapper.I;
+        expect(
+          () => instance2.addMap<bool, int>((source) => 1),
+          throwsA(isA<MapAlreadyExistsException>()),
+        );
+      });
+    });
     group('When I want to remove a map model', () {
       late Mapper mapper;
       setUp(() {
