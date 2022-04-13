@@ -33,17 +33,21 @@ class Mapper {
     _maps.add(MapModel<TSrc, TDst>(function));
   }
 
+  /// Unregisters a map from the service
+  ///
+  /// [TSrc] is the source type
+  ///
+  /// [TDst] is the destination type
+  ///
+  /// [bothWays] determins if we should unregister both going
+  /// from [TSrc] to [TDst] as well as from [TDst] to [TSrc] or not
   void removeMap<TSrc, TDst>({bool bothWays = false}) {
     final mapModelToRemove = getMapModel<TSrc, TDst>();
-    if (mapModelToRemove != null) {
-      _maps.remove(mapModelToRemove);
-    }
+    _maps.remove(mapModelToRemove);
 
     if (bothWays) {
       final backwardsMapModelToRemove = getMapModel<TDst, TSrc>();
-      if (backwardsMapModelToRemove != null) {
-        _maps.remove(backwardsMapModelToRemove);
-      }
+      _maps.remove(backwardsMapModelToRemove);
     }
   }
 

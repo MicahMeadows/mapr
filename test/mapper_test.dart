@@ -6,6 +6,30 @@ import 'test_model/person_models.dart';
 
 void main() {
   group('Given I want to convert types', () {
+    group('When I want to remove a map model', () {
+      late Mapper mapper;
+      setUp(() {
+        mapper = Mapper();
+        mapper.addMap<int, double>((source) => 22.2);
+      });
+      tearDown(() {
+        mapper.removeMap<int, double>(bothWays: true);
+      });
+      test(
+          'Then if there is no map model registered with signature nothing happens.',
+          () {
+        mapper.removeMap<bool, double>();
+      });
+      test('Then a registered map will be removed.', () {
+        mapper.removeMap<int, double>();
+        expect(mapper.mapModelExists<int, double>(), false);
+      });
+      test(
+          'Then removing with bothWays enabled when other direction doesnt exist is fine.',
+          () {
+        mapper.removeMap<int, double>(bothWays: true);
+      });
+    });
     group('When I want to add a map model', () {
       test('Then if the map model already exists an exception is thrown.', () {
         final mapper = Mapper();
