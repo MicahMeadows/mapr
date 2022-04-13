@@ -23,8 +23,8 @@ class MapModelNotFoundException extends MapException {
         );
 }
 
-class MappingFailureException extends MapException {
-  MappingFailureException({
+class FailedToMapException extends MapException {
+  FailedToMapException({
     required Type sourceType,
     required Type destinationType,
     String? message,

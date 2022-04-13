@@ -7,15 +7,32 @@ import 'test_model/person_models.dart';
 void main() {
   group('Given I want to convert types', () {
     group('When I want to convert PersonDto and Person', () {
+      const dtoPerson = DtoPerson(
+        name: 'bob isaacs',
+        age: '12',
+        email: 'bob@gmail.com',
+        streetName: 'lauren ln',
+        streetNumber: '123',
+      );
+
+      const person = Person(
+        address: Address(
+          streetName: 'lauren ln',
+          streetNumber: 123,
+        ),
+        age: 12,
+        email: 'bob@gmail.com',
+        firstName: 'bob',
+        lastName: 'isaacs',
+      );
+
       void createMaps() {
         Mapr().addMap<DtoPerson, Person>((source) {
           final splitName = source.name.split(' ');
           final firstName = splitName[0];
           final lastName = splitName[1];
 
-          final splitAddress = source.streetName.split(' ');
-          final streetNum = int.parse(splitAddress[0]);
-          final streetName = splitAddress.sublist(1).join();
+          final streetNum = int.parse(source.streetNumber);
 
           return Person(
             firstName: firstName,
@@ -23,11 +40,12 @@ void main() {
             age: int.parse(source.age),
             email: source.email,
             address: Address(
-              streetName: streetName,
+              streetName: source.streetName,
               streetNumber: streetNum,
             ),
           );
         });
+
         Mapr().addMap<Person, DtoPerson>((source) {
           final name = '${source.firstName} ${source.lastName}';
           return DtoPerson(
@@ -42,48 +60,34 @@ void main() {
 
       test('Then a valid DtoPerson will become a valid Person', () {
         createMaps();
-        const input = DtoPerson(
-          name: 'bob isaacs',
-          age: '12',
-          email: 'bob@gmail.com',
-          streetName: 'lauren ln',
-          streetNumber: '123',
-        );
 
-        var result = Mapr().map<DtoPerson, Person>(input);
+        var result = Mapr().map<DtoPerson, Person>(dtoPerson);
 
-        const expected = Person(
-          address: Address(streetName: 'lauren ln', streetNumber: 123),
-          age: 12,
-          email: 'bob@gmail.com',
-          firstName: 'bob',
-          lastName: 'isaacs',
-        );
-
-        expect(expected, result);
+        expect(person, result);
       });
 
       test('Then a valid Person will become a valid DtoPerson', () {
         createMaps();
-        const input = Person(
-          address: Address(streetName: 'lauren ln', streetNumber: 123),
-          age: 12,
-          email: 'bob@gmail.com',
-          firstName: 'bob',
-          lastName: 'isaacs',
-        );
 
-        var result = Mapr().map<Person, DtoPerson>(input);
+        var result = Mapr().map<Person, DtoPerson>(person);
 
-        const expected = DtoPerson(
-          name: 'bob isaacs',
-          age: '12',
-          email: 'bob@gmail.com',
-          streetName: 'lauren ln',
-          streetNumber: '123',
-        );
+        expect(dtoPerson, result);
+      });
 
-        expect(expected, result);
+      test('Then a valid Person to a DtoPerson and back remains the same.', () {
+        createMaps();
+
+        var step1Result = Mapr().map<Person, DtoPerson>(person);
+        var step2Result = Mapr().map<DtoPerson, Person>(step1Result);
+        expect(person, step2Result);
+      });
+
+      test('Then a valid DtoPerson to a Person and back remains the same.', () {
+        createMaps();
+
+        var step1Result = Mapr().map<DtoPerson, Person>(dtoPerson);
+        var step2Result = Mapr().map<Person, DtoPerson>(step1Result);
+        expect(dtoPerson, step2Result);
       });
     });
     group('When I want to convert a String int with int', () {
@@ -122,7 +126,7 @@ void main() {
         final function = Mapr().map<String, int>;
         expect(
           () => function(origional),
-          throwsA(isA<MappingFailureException>()),
+          throwsA(isA<FailedToMapException>()),
         );
       });
     });

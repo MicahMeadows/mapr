@@ -16,13 +16,9 @@ class Mapr {
   }
 
   TDst map<TSrc, TDst>(TSrc sourceObject) {
-    final sourceType = sourceObject.runtimeType;
-
     final rawMapModel = maps.firstWhere((element) {
-      return element.sourceType == sourceType &&
-          element.destinationType == TDst;
+      return element.sourceType == TSrc && element.destinationType == TDst;
     }, orElse: () {
-      // throw Exception('Mapping model for <$TSrc> to <$TDst> not found.');
       throw MapModelNotFoundException(sourceType: TSrc, destinationType: TDst);
     });
 
@@ -31,7 +27,11 @@ class Mapr {
       final convertResult = mapModel.convert(sourceObject);
       return convertResult;
     } catch (e) {
-      throw MappingFailureException(sourceType: TSrc, destinationType: TDst);
+      throw FailedToMapException(
+        sourceType: TSrc,
+        destinationType: TDst,
+        message: e.toString(),
+      );
     }
   }
 }
