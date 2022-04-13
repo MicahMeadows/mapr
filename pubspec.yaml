@@ -1,6 +1,6 @@
 name: mapr
 description: A Flutter package that simplifies mapping objects to other objects.
-version: 0.0.1
+version: 0.0.2
 homepage: https://github.com/micahmeadows/mapr
 
 environment:
