@@ -1,3 +1,4 @@
+/// Base mapping exception
 class MapException implements Exception {
   final Type? sourceType;
   final Type? destinationType;
@@ -10,6 +11,7 @@ class MapException implements Exception {
   });
 }
 
+/// Mapping exception to throw when there is no map model registered to singleton
 class MapModelNotFoundException extends MapException {
   MapModelNotFoundException({
     required Type sourceType,
@@ -23,6 +25,7 @@ class MapModelNotFoundException extends MapException {
         );
 }
 
+/// Mapping exception to throw when an error occurs during mapping
 class FailedToMapException extends MapException {
   FailedToMapException({
     required Type sourceType,
